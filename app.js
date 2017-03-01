@@ -56,7 +56,7 @@ var cloudantCreds = getServiceCreds(appEnv, "cloudant-photo-analyzer"),
     dbName = "photo-analyzer",
     cloudant,
     db;
-console.log("JT CLoudant Creds: " + JSON.stringify(cloudantCredsd));
+console.log("JT CLoudant Creds: " + JSON.stringify(cloudantCreds));
 
 //---Routers and View Engine----------------------------------------------------
 app.set('views', __dirname + '/views');
