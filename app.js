@@ -145,9 +145,12 @@ app.listen(appEnv.port, function() {
 
         console.log('Connected to cloudant');
         cloudant.ping(function(er, reply) {
+            console.log("Inside cloudant.ping");
             if (er) {
                 return console.log('Failed to ping Cloudant. Did the network just go down?');
             }
+
+            console.log("About to log server version");
 
             console.log('Server version = %s', reply.version);
             console.log('I am %s and my roles are %j', reply.userCtx.name, reply.userCtx.roles);
@@ -173,6 +176,7 @@ app.listen(appEnv.port, function() {
                 }
             });
         });
+        console.log("completed cloudant.ping");
     });
 });
 
