@@ -84,6 +84,7 @@ passport.deserializeUser(function(obj, done) {
 });
 
 if (process.env.FACEBOOK_APP_ID !== undefined && process.env.FACEBOOK_APP_SECRET !== undefined) {
+    console.log("PROCESS ENV VARIABLES ARE DEFINED");
 
     passport.use(new FacebookStrategy({
             clientID: process.env.FACEBOOK_APP_ID,
@@ -92,6 +93,7 @@ if (process.env.FACEBOOK_APP_ID !== undefined && process.env.FACEBOOK_APP_SECRET
             scope: ["user_photos", "user_posts"]
         },
         function(accessToken, refreshToken, profile, done) {
+            console.log("about to call async.waterfall");
             async.waterfall([
                 function(next) {
                     graph.setAccessToken(accessToken);
@@ -99,6 +101,7 @@ if (process.env.FACEBOOK_APP_ID !== undefined && process.env.FACEBOOK_APP_SECRET
                 },
                 function(photos, next) {
                     var params = { fields: "images" };
+                    console.log("ABOUT TO ITERATE THRU PHOTOS");
                     _.each(photos.data, function(photo) {
                         photo.graph = graph;
                         photo.userId = profile.id;
@@ -118,6 +121,7 @@ if (process.env.FACEBOOK_APP_ID !== undefined && process.env.FACEBOOK_APP_SECRET
     ));
 }
 
+console.log("about to get auth/facebook");
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback',
@@ -131,7 +135,9 @@ app.get('/auth/facebook/callback',
 app.listen(appEnv.port, function() {
     console.log("server started on port " + appEnv.port);
     var dbCreated = false;
+    console.log("about to connect to Cloudant");
     Cloudant({ account: cloudantCreds.username, password: cloudantCreds.password }, function(er, dbInstance) {
+        console.l("inside cloudant callback");
         cloudant = dbInstance;
         if (er) {
             return console.log('Error connecting to Cloudant account %s: %s', cloudantCreds.username, er.message);
@@ -159,6 +165,7 @@ app.listen(appEnv.port, function() {
                     }
                 });
                 if (dbCreated === false) {
+                    console.log("about to create db");
                     cloudant.db.create(dbName, seedDB);
                 } else {
                     db = cloudant.db.use(dbName);
@@ -179,6 +186,8 @@ function analyzePhoto(photo, callback) {
         };
 
     async.waterfall([
+        console.log("inside async.waterfall");
+
         function(next) {
             var params = { fields: "images" };
             graph.get("/" + photo.id, params, next);
@@ -267,6 +276,7 @@ app.get('/logout', function(request, response) {
 
 //---Seed the db----------------------------------------------------------------
 function seedDB(callback) {
+    console.log("inside seedDB");
     db = cloudant.use(dbName);
 
     async.waterfall([
