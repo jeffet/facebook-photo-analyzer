@@ -187,13 +187,15 @@ function analyzePhoto(photo, callback) {
     console.log("Inside analyzePhoto");
 
     async.waterfall([
-        console.log("inside async.waterfall");
+
 
         function(next) {
             var params = { fields: "images" };
+            console("Inside async.waterfall call function next");
             graph.get("/" + photo.id, params, next);
         },
         function(result, next) {
+            console("Inside async.waterfall call function rsult, next");
             response.source = result.images[0].source;
             var stream = request.get(result.images[0].source).pipe(fs.createWriteStream(file));
             stream.on("finish", function() {
