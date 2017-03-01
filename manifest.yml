@@ -7,12 +7,12 @@ declared-services:
     label: watson_vision_combined
     plan: free
 applications:
-- name: facebook-photo-analyzer
+- name: facebook-photo-analyzer-jtenn
   framework: node
   runtime: node12
   memory: 256M
   instances: 1
-  host: facebook-photo-analyzer
+  host: facebook-photo-analyzer-jtenn
   path: .
   command: node app.js
   services:
