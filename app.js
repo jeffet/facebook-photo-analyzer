@@ -184,6 +184,7 @@ function analyzePhoto(photo, callback) {
             photoId: photo.id,
             userId: photo.userId
         };
+    console.log("Inside analyzePhoto");
 
     async.waterfall([
         console.log("inside async.waterfall");
